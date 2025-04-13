@@ -345,6 +345,20 @@ extern "C" {
 #define GLFW_REPEAT                 2
 /*! @} */
 
+/*! @brief window decoration style.
+ *  @ingroup input
+ *  @{ */
+#ifdef GLFW_WINDOW_DECORATION_USING_STYLE
+enum GLFWWindowDecorationEnum {
+  /*! @brief no border, no title bar */
+  GLFW_WIN_DECO_NONE = 0,
+  /*! @brief bordered, with title bar */
+  GLFW_WIN_DECO_DEFAULT = 1,
+  /*! @brief bordered, without title bar */
+  GLFW_WIN_DECO_NO_TITLE_BAR = 2,
+};
+#endif
+
 /*! @defgroup hat_state Joystick hat states
  *  @brief Joystick hat states.
  *

@@ -532,6 +532,25 @@ struct _GLFWwindow
     struct _GLFWwindow* next;
 
     // Window settings and state
+#ifdef GLFW_WINDOW_DECORATION_USING_STYLE
+// ====== boolean value field ======
+    GLFWbool            resizable;
+    GLFWbool            autoIconify;
+    GLFWbool            floating;
+    GLFWbool            focusOnShow;
+    GLFWbool            mousePassthrough;
+    GLFWbool            shouldClose;
+
+    GLFWbool            stickyKeys;
+    GLFWbool            stickyMouseButtons;
+    GLFWbool            lockKeyMods;
+    GLFWbool            disableMouseButtonLimit;
+
+    GLFWbool            rawMouseMotion;
+
+// ====== enumeratable value field ======
+    enum GLFWWindowDecorationEnum decorated;
+#else
     GLFWbool            resizable;
     GLFWbool            decorated;
     GLFWbool            autoIconify;
@@ -539,6 +558,14 @@ struct _GLFWwindow
     GLFWbool            focusOnShow;
     GLFWbool            mousePassthrough;
     GLFWbool            shouldClose;
+
+    GLFWbool            stickyKeys;
+    GLFWbool            stickyMouseButtons;
+    GLFWbool            lockKeyMods;
+    GLFWbool            disableMouseButtonLimit;
+
+    GLFWbool            rawMouseMotion;
+#endif
     void*               userPointer;
     GLFWbool            doublebuffer;
     GLFWvidmode         videoMode;
@@ -550,16 +577,11 @@ struct _GLFWwindow
     int                 maxwidth, maxheight;
     int                 numer, denom;
 
-    GLFWbool            stickyKeys;
-    GLFWbool            stickyMouseButtons;
-    GLFWbool            lockKeyMods;
-    GLFWbool            disableMouseButtonLimit;
     int                 cursorMode;
     char                mouseButtons[GLFW_MOUSE_BUTTON_LAST + 1];
     char                keys[GLFW_KEY_LAST + 1];
     // Virtual cursor position when cursor is disabled
     double              virtualCursorPosX, virtualCursorPosY;
-    GLFWbool            rawMouseMotion;
 
     _GLFWcontext        context;
 
