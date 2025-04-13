@@ -358,6 +358,7 @@ enum GLFWWindowDecorationEnum {
   GLFW_WIN_DECO_NO_TITLE_BAR = 2,
 };
 #endif
+/*! @} */
 
 /*! @defgroup hat_state Joystick hat states
  *  @brief Joystick hat states.
