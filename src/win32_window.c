@@ -46,7 +46,7 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
         style |= WS_POPUP;
     else
     {
-#ifdef GLFW_WINDOW_DECORATION_USING_STYLE
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
         switch (window->decorated) {
             case GLFW_WIN_DECO_NONE: {
                 style |= WS_POPUP;

@@ -532,7 +532,7 @@ struct _GLFWwindow
     struct _GLFWwindow* next;
 
     // Window settings and state
-#ifdef GLFW_WINDOW_DECORATION_USING_STYLE
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
 // ====== boolean value field ======
     GLFWbool            resizable;
     GLFWbool            autoIconify;
