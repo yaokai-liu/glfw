@@ -2069,7 +2069,7 @@ void _glfwSetWindowResizableWin32(_GLFWwindow* window, GLFWbool enabled)
     updateWindowStyles(window);
 }
 
-void _glfwSetWindowDecoratedWin32(_GLFWwindow* window, GLFWbool enabled)
+void _glfwSetWindowDecoratedWin32(_GLFWwindow* window, enum GLFWWindowDecorationEnum decoration)
 {
     updateWindowStyles(window);
 }
