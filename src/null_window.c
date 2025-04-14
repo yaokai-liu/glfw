@@ -394,9 +394,9 @@ void _glfwSetWindowResizableNull(_GLFWwindow* window, GLFWbool enabled)
     window->null.resizable = enabled;
 }
 
-void _glfwSetWindowDecoratedNull(_GLFWwindow* window, GLFWbool enabled)
+void _glfwSetWindowDecoratedNull(_GLFWwindow* window, enum GLFWWindowDecorationEnum decoration)
 {
-    window->null.decorated = enabled;
+    window->null.decorated = decoration;
 }
 
 void _glfwSetWindowFloatingNull(_GLFWwindow* window, GLFWbool enabled)

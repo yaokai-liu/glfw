@@ -627,8 +627,7 @@ static GLFWbool createNativeWindow(_GLFWwindow* window,
                  _glfw.x11.context,
                  (XPointer) window);
 
-    if (!wndconfig->decorated)
-        _glfwSetWindowDecoratedX11(window, GLFW_FALSE);
+    _glfwSetWindowDecoratedX11(window, wndconfig->decorated);
 
     if (_glfw.x11.NET_WM_STATE && !window->monitor)
     {
@@ -2621,7 +2620,7 @@ void _glfwSetWindowResizableX11(_GLFWwindow* window, GLFWbool enabled)
     updateNormalHints(window, width, height);
 }
 
-void _glfwSetWindowDecoratedX11(_GLFWwindow* window, GLFWbool enabled)
+void _glfwSetWindowDecoratedX11(_GLFWwindow* window, enum GLFWWindowDecorationEnum decoration)
 {
     struct
     {
@@ -2633,7 +2632,7 @@ void _glfwSetWindowDecoratedX11(_GLFWwindow* window, GLFWbool enabled)
     } hints = {0};
 
     hints.flags = MWM_HINTS_DECORATIONS;
-    hints.decorations = enabled ? MWM_DECOR_ALL : 0;
+    hints.decorations = (decoration != GLFW_WIN_DECO_NONE) ? MWM_DECOR_ALL : 0;
 
     XChangeProperty(_glfw.x11.display, window->x11.handle,
                     _glfw.x11.MOTIF_WM_HINTS,

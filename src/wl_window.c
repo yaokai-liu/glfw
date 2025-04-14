@@ -2578,17 +2578,17 @@ void _glfwSetWindowResizableWayland(_GLFWwindow* window, GLFWbool enabled)
         updateXdgSizeLimits(window);
 }
 
-void _glfwSetWindowDecoratedWayland(_GLFWwindow* window, GLFWbool enabled)
+void _glfwSetWindowDecoratedWayland(_GLFWwindow* window, enum GLFWWindowDecorationEnum decoration)
 {
     if (window->wl.libdecor.frame)
     {
-        libdecor_frame_set_visibility(window->wl.libdecor.frame, enabled);
+        libdecor_frame_set_visibility(window->wl.libdecor.frame, decoration);
     }
     else if (window->wl.xdg.decoration)
     {
         uint32_t mode;
 
-        if (enabled)
+        if (decoration != GLFW_WIN_DECO_NONE)
             mode = ZXDG_TOPLEVEL_DECORATION_V1_MODE_SERVER_SIDE;
         else
             mode = ZXDG_TOPLEVEL_DECORATION_V1_MODE_CLIENT_SIDE;
@@ -2597,7 +2597,7 @@ void _glfwSetWindowDecoratedWayland(_GLFWwindow* window, GLFWbool enabled)
     }
     else if (window->wl.xdg.toplevel)
     {
-        if (enabled)
+        if (decoration != GLFW_WIN_DECO_NONE)
             createFallbackDecorations(window);
         else
             destroyFallbackDecorations(window);
