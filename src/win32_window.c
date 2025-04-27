@@ -1721,8 +1721,9 @@ void _glfwSetWindowPosWin32(_GLFWwindow* window, int xpos, int ypos)
                            FALSE, getWindowExStyle(window));
     }
 
-    SetWindowPos(window->win32.handle, NULL, rect.left, rect.top, 0, 0,
-                 SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
+    SetWindowPos(window->win32.handle, NULL,
+                 (rect.right + rect.left) / 2, (rect.bottom + rect.top) / 2,
+                 0, 0, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
 }
 
 void _glfwGetWindowSizeWin32(_GLFWwindow* window, int* width, int* height)
