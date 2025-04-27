@@ -46,8 +46,29 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
         style |= WS_POPUP;
     else
     {
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
+        switch (window->decorated) {
+            case GLFW_WIN_DECO_NONE: {
+                style |= WS_POPUP;
+                break;
+            }
+            case GLFW_WIN_DECO_DEFAULT: {
+                style |= WS_SYSMENU | WS_MINIMIZEBOX | WS_CAPTION;
+                if (window->resizable)
+                  style |= WS_MAXIMIZEBOX | WS_THICKFRAME;
+                break;
+            }
+            case GLFW_WIN_DECO_NO_TITLE_BAR: {
+              if (window->resizable)
+                    style |= WS_SIZEBOX | WS_BORDER | WS_POPUP;
+              break;
+            }
+            default: {
+              style |= WS_SYSMENU | WS_MINIMIZEBOX;
+            }
+        }
+#else
         style |= WS_SYSMENU | WS_MINIMIZEBOX;
-
         if (window->decorated)
         {
             style |= WS_CAPTION;
@@ -57,6 +78,7 @@ static DWORD getWindowStyle(const _GLFWwindow* window)
         }
         else
             style |= WS_POPUP;
+#endif
     }
 
     return style;
@@ -1150,7 +1172,50 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         {
             return TRUE;
         }
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
+        case WM_NCCALCSIZE: {
+            if (wParam == TRUE && lParam) {
+                NCCALCSIZE_PARAMS* pParams = (NCCALCSIZE_PARAMS*) lParam;
+                pParams->rgrc[0].top += 1;
+                pParams->rgrc[0].right -= 2;
+                pParams->rgrc[0].bottom -= 2;
+                pParams->rgrc[0].left += 2;
+            }
+            return 0;
+        }
+        case WM_NCHITTEST: {
+            // Expand the hit test area for resizing
+            const int borderWidth = 8; // Adjust this value to control the hit test area size
 
+            POINTS mousePos = MAKEPOINTS(lParam);
+            POINT clientMousePos = { mousePos.x, mousePos.y };
+            ScreenToClient(hWnd, &clientMousePos);
+
+            RECT windowRect;
+            GetClientRect(hWnd, &windowRect);
+
+            if (clientMousePos.y >= windowRect.bottom - borderWidth) {
+                if (clientMousePos.x <= borderWidth)
+                    return HTBOTTOMLEFT;
+                else if (clientMousePos.x >= windowRect.right - borderWidth)
+                    return HTBOTTOMRIGHT;
+                else
+                    return HTBOTTOM;
+            } else if (clientMousePos.y <= borderWidth) {
+                if (clientMousePos.x <= borderWidth)
+                    return HTTOPLEFT;
+                else if (clientMousePos.x >= windowRect.right - borderWidth)
+                    return HTTOPRIGHT;
+                else
+                    return HTTOP;
+            } else if (clientMousePos.x <= borderWidth) {
+                return HTLEFT;
+            } else if (clientMousePos.x >= windowRect.right - borderWidth) {
+                return HTRIGHT;
+            }
+            break;
+        }
+#endif
         case WM_NCACTIVATE:
         case WM_NCPAINT:
         {
@@ -1657,8 +1722,14 @@ void _glfwSetWindowPosWin32(_GLFWwindow* window, int xpos, int ypos)
                            FALSE, getWindowExStyle(window));
     }
 
+  #ifdef GLFW_WINDOW_DECORATION_USING_ENUM
+    SetWindowPos(window->win32.handle, NULL,
+                 (rect.right + rect.left) / 2, (rect.bottom + rect.top) / 2,
+                 0, 0, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
+  #else
     SetWindowPos(window->win32.handle, NULL, rect.left, rect.top, 0, 0,
                  SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
+  #endif
 }
 
 void _glfwGetWindowSizeWin32(_GLFWwindow* window, int* width, int* height)
@@ -2005,7 +2076,7 @@ void _glfwSetWindowResizableWin32(_GLFWwindow* window, GLFWbool enabled)
     updateWindowStyles(window);
 }
 
-void _glfwSetWindowDecoratedWin32(_GLFWwindow* window, GLFWbool enabled)
+void _glfwSetWindowDecoratedWin32(_GLFWwindow* window, enum GLFWWindowDecorationEnum decoration)
 {
     updateWindowStyles(window);
 }

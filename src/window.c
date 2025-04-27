@@ -268,7 +268,11 @@ void glfwDefaultWindowHints(void)
     memset(&_glfw.hints.window, 0, sizeof(_glfw.hints.window));
     _glfw.hints.window.resizable    = GLFW_TRUE;
     _glfw.hints.window.visible      = GLFW_TRUE;
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
+    _glfw.hints.window.decorated    = GLFW_WIN_DECO_DEFAULT;
+#else
     _glfw.hints.window.decorated    = GLFW_TRUE;
+#endif
     _glfw.hints.window.focused      = GLFW_TRUE;
     _glfw.hints.window.autoIconify  = GLFW_TRUE;
     _glfw.hints.window.centerCursor = GLFW_TRUE;
@@ -350,7 +354,11 @@ GLFWAPI void glfwWindowHint(int hint, int value)
             _glfw.hints.window.resizable = value ? GLFW_TRUE : GLFW_FALSE;
             return;
         case GLFW_DECORATED:
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
+            _glfw.hints.window.decorated = value;
+#else
             _glfw.hints.window.decorated = value ? GLFW_TRUE : GLFW_FALSE;
+#endif
             return;
         case GLFW_FOCUSED:
             _glfw.hints.window.focused = value ? GLFW_TRUE : GLFW_FALSE;
