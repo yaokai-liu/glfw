@@ -1172,7 +1172,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         {
             return TRUE;
         }
-
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
         case WM_NCCALCSIZE: {
             if (wParam == TRUE && lParam) {
                 NCCALCSIZE_PARAMS* pParams = (NCCALCSIZE_PARAMS*) lParam;
@@ -1215,6 +1215,7 @@ static LRESULT CALLBACK windowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
             }
             break;
         }
+#endif
         case WM_NCACTIVATE:
         case WM_NCPAINT:
         {
@@ -1721,9 +1722,14 @@ void _glfwSetWindowPosWin32(_GLFWwindow* window, int xpos, int ypos)
                            FALSE, getWindowExStyle(window));
     }
 
+  #ifdef GLFW_WINDOW_DECORATION_USING_ENUM
     SetWindowPos(window->win32.handle, NULL,
                  (rect.right + rect.left) / 2, (rect.bottom + rect.top) / 2,
                  0, 0, SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
+  #else
+    SetWindowPos(window->win32.handle, NULL, rect.left, rect.top, 0, 0,
+                 SWP_NOACTIVATE | SWP_NOZORDER | SWP_NOSIZE);
+  #endif
 }
 
 void _glfwGetWindowSizeWin32(_GLFWwindow* window, int* width, int* height)
