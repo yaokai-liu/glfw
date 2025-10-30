@@ -1403,6 +1403,21 @@ typedef struct GLFWmonitor GLFWmonitor;
  */
 typedef struct GLFWwindow GLFWwindow;
 
+/*! @brief window decoration style.
+ *  @ingroup window
+ *  @{ */
+#ifdef GLFW_WINDOW_DECORATION_USING_ENUM
+enum GLFWWindowDecorationEnum {
+  /*! @brief no border, no title bar */
+  GLFW_WIN_DECO_NONE = 0,
+  /*! @brief bordered, with title bar */
+  GLFW_WIN_DECO_DEFAULT = 1,
+  /*! @brief bordered, without title bar */
+  GLFW_WIN_DECO_NO_TITLE_BAR = 2,
+};
+#endif
+/*! @} */
+
 /*! @brief Opaque cursor object.
  *
  *  Opaque cursor object.
